@@ -7,9 +7,9 @@ using AccountManagementServer.API.Controllers;
 
 namespace AccountManagementServer.Infrastructure.Data
 {
-    public class AccountMaagmentDbContext : IdentityDbContext<IdentityUser>
+    public class AccountManagementDbContext : IdentityDbContext<IdentityUser>
     {
-        public AccountMaagmentDbContext(DbContextOptions<AccountMaagmentDbContext> options) : base(options) { }
+        public AccountManagementDbContext(DbContextOptions<AccountManagementDbContext> options) : base(options) { }
         public DbSet<Category> Categories { get; set; }
         public DbSet<MonthlyForm> MonthlyForms { get; set; }
         public DbSet<User> Users { get; set; }
@@ -43,7 +43,7 @@ namespace AccountManagementServer.Infrastructure.Data
             base.OnModelCreating(modelBuilder);
         }
 
-        public static implicit operator AccountMaagmentDbContext(CategoriesController v)
+        public static implicit operator AccountManagementDbContext(CategoriesController v)
         {
             throw new NotImplementedException();
         }

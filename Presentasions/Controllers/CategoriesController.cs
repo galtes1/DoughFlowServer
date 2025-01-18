@@ -8,9 +8,9 @@ namespace AccountManagementServer.API.Controllers
     [Route("api/[controller]")]
     public class CategoriesController : ControllerBase
     {
-        private readonly AccountMaagmentDbContext _context;
+        private readonly AccountManagementDbContext _context;
 
-        public CategoriesController(AccountMaagmentDbContext context)
+        public CategoriesController(AccountManagementDbContext context)
         {
             _context = context;
         }

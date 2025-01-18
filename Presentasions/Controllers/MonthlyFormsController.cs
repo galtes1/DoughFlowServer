@@ -9,9 +9,9 @@ namespace AccountManagementServer.API.Controllers
     [Route("api/[controller]")]
     public class MonthlyFormsController : ControllerBase
     {
-        private readonly AccountMaagmentDbContext _context;
+        private readonly AccountManagementDbContext _context;
 
-        public MonthlyFormsController(AccountMaagmentDbContext context)
+        public MonthlyFormsController(AccountManagementDbContext context)
         {
             _context = context;
         }

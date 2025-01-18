@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AccountManagementServer.Migrations
 {
     [DbContext(typeof(AccountManagementDbContext))]
-    partial class AccountMaagmentDbContextModelSnapshot : ModelSnapshot
+    partial class AccountManagementDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {

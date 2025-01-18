@@ -17,11 +17,12 @@ namespace AccountManagementServer
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            // karen
 
             builder.Services.AddControllers();
 
             string connectionString = "Server=KarenM-NB; Database=AccountManagementDb; Trusted_Connection=True;TrustServerCertificate=True;";
-            builder.Services.AddDbContext<AccountMaagmentDbContext>(options => options.UseSqlServer(connectionString));
+            builder.Services.AddDbContext<AccountManagementDbContext>(options => options.UseSqlServer(connectionString));
             builder.Services.AddSingleton<IAuthService, JwtAuthService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IUserService, UserService>();
