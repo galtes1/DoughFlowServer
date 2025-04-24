@@ -22,7 +22,7 @@ namespace AccountManagementServer
 
             builder.Services.AddControllers();
 
-            string connectionString = "Server=FOR-PDC\\MSSQL2022; Database=AccountManagementDb; Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = "Server=YOUR_DB; Database=AccountManagementDb; Trusted_Connection=True;TrustServerCertificate=True;";
              builder.Services.AddDbContext<AccountManagementDbContext>(options => options.UseSqlServer(connectionString));
 
             builder.Services.AddSingleton<IAuthService, JwtAuthService>();
