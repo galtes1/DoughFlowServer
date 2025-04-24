@@ -16,16 +16,37 @@ namespace AccountManagementServer
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            // karen 123
+            builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+            // קבלת המפתח מהקונפיגורציה
+            string openAiKey = builder.Configuration["myChatGPT:ApiKey"];
 
             builder.Services.AddControllers();
 
-            string connectionString = "Server=KarenM-NB; Database=AccountManagementDb; Trusted_Connection=True;TrustServerCertificate=True;";
-            builder.Services.AddDbContext<AccountManagementDbContext>(options => options.UseSqlServer(connectionString));
+            string connectionString = "Server=FOR-PDC\\MSSQL2022; Database=AccountManagementDb; Trusted_Connection=True;TrustServerCertificate=True;";
+             builder.Services.AddDbContext<AccountManagementDbContext>(options => options.UseSqlServer(connectionString));
+
             builder.Services.AddSingleton<IAuthService, JwtAuthService>();
+
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IUserService, UserService>();
+
+            builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
+            builder.Services.AddScoped<IExpenseService, ExpenseService>();
+
+            builder.Services.AddScoped<IMonthRepository, MonthRepository>();
+            builder.Services.AddScoped<IMonthService, MonthService>();
+
+            builder.Services.AddScoped<IIncomeRepository, IncomeRepository>();
+            builder.Services.AddScoped<IIncomeService, IncomeService>();
+            builder.Services.AddHttpClient<GptService>();
+
+
+            builder.Logging.ClearProviders();
+            builder.Logging.AddConsole(); 
+            builder.Logging.AddDebug();  
+
+
+
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
@@ -33,6 +54,7 @@ namespace AccountManagementServer
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
+                    ClockSkew = TimeSpan.Zero,
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
@@ -44,7 +66,7 @@ namespace AccountManagementServer
 
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("MustBeAdmin", policy => policy.RequireClaim("isAdmin", "True"));
+                options.AddPolicy("MustBeBusiness", policy => policy.RequireClaim("IsBusiness", "True"));
             });
 
             builder.Services.AddCors(
@@ -73,6 +95,9 @@ namespace AccountManagementServer
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            var logger = app.Services.GetRequiredService<ILogger<Program>>();
+            logger.LogInformation("[LOG] השרת התחיל בהצלחה!");
 
             app.MapControllers();
 

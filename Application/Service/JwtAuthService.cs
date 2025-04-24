@@ -11,10 +11,11 @@ namespace AccountManagementServer.Application.Service
     {
         public string GenerateToken(User u)
         {
-            Claim[] claims = new Claim[]
-            {
-                new Claim("_id", u.Id.ToString()),
-            };
+            Claim[] claims =
+            [
+                new("UserId", u.UserId.ToString()),
+                new("IsBusiness", u.IsBusiness.ToString()),
+            ];
 
             SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("b0deb9b3-2770-49f1-9c7f-accdce966e76"));
             SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -22,7 +23,7 @@ namespace AccountManagementServer.Application.Service
             JwtSecurityToken token = new JwtSecurityToken(
                 issuer: "AccountManagementServer",
                 audience: "AccountManagementReactApp",
-                expires: DateTime.Now.AddDays(2),
+                expires: DateTime.Now.AddMinutes(60),
                 claims: claims,
                 signingCredentials: credentials
                 );

@@ -9,14 +9,11 @@ namespace AccountManagementServer.Application.Utils
 
         public static string GenerateHashedPassword(string password, User user) //register
         {
-
-            user.Password = "";
             return passwordHasher.HashPassword(user, password);
         }
 
         public static bool VerifyPassword(string password, string hashedPassword, User user) //Login
         {
-            user.Password = "";
             PasswordVerificationResult result = passwordHasher.VerifyHashedPassword(user, hashedPassword, password);
 
             if (result == PasswordVerificationResult.Failed)

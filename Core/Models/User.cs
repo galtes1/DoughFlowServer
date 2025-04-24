@@ -1,20 +1,45 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using System.Xml.Linq;
+
 
 namespace AccountManagementServer.Core.Models
 {
     public class User
     {
-        [JsonPropertyName("_id")]
-        public int Id { get; set; } 
+
+        [Key]
+        public int UserId { get; set; }
+
+
+        [Required]
         public string Name { get; set; }
+
+
+        [Required]
         [EmailAddress]
         public string Email { get; set; }
+        
+
+        [Required]
         public string Password { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+
         [JsonIgnore]
-        public bool IsAdmin { get; set; } = false;
-        public List<MonthlyFormEntry> Entries { get; set; } = new List<MonthlyFormEntry>();
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+
+        [Required]
+        public bool IsBusiness { get; set; }
+
+
+        [JsonIgnore]
+        public ICollection<Month> Months { get; set; } = new List<Month>();
+
+        [NotMapped]
+        [JsonIgnore]
+        public string? CurrentPassword { get; set; }
+
+
     }
 }

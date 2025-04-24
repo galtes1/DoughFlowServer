@@ -9,5 +9,7 @@ namespace AccountManagementServer.Core.Interfaces
         public Task<User?> GetUserByIdAsync(int id);
         public Task<User?> UpdateUserAsync(int id, User user);
         public Task<User?> DeleteUserAsync(int id);
+        public Task<bool> IsCurrentPasswordValidAsync(int userId, string currentPassword);
+
     }
 }
