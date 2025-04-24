@@ -35,6 +35,7 @@
   <ItemGroup>
     <Folder Include="Application\Fillters\" />
     <Folder Include="Migrations\" />
+    <Folder Include="Sql\" />
   </ItemGroup>
 
   <ItemGroup>
