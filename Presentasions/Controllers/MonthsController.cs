@@ -1,7 +1,8 @@
-﻿using System.Security.Claims;
-using AccountManagementServer.Application.Interface;
+﻿using AccountManagementServer.Application.Interface;
 using AccountManagementServer.Core.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using System.Text;
 
 namespace AccountManagementServer.Presentasions.Controllers
 {
@@ -19,9 +20,8 @@ namespace AccountManagementServer.Presentasions.Controllers
         [HttpGet("pie-data")]
         public async Task<IActionResult> GetPieDataByMonth([FromQuery] int userId, [FromQuery] int monthId)
         {
-                  
-            try
 
+            try
             {
 
                 var monthData = await _monthService.GetPieDataByMonthAsync(userId, monthId);
@@ -42,8 +42,6 @@ namespace AccountManagementServer.Presentasions.Controllers
                 return BadRequest(new { error = ex.Message });
             }
         }
-
-
 
         [HttpPost("Create")]
         public async Task<IActionResult> CreateMonth([FromBody] Month month)
@@ -71,13 +69,13 @@ namespace AccountManagementServer.Presentasions.Controllers
             }
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetMonthById(int id)
+        [HttpGet("Get-Month-By-Id")]
+        public async Task<IActionResult> GetMonthById(int monthId)
         {
-            var month = await _monthService.GetMonthByIdAsync(id);
+            var month = await _monthService.GetMonthByIdAsync(monthId);
             if (month == null)
             {
-                return NotFound($"Month with ID {id} not found.");
+                return NotFound($"Month with ID {monthId} not found.");
             }
             return Ok(month);
         }
@@ -115,9 +113,6 @@ namespace AccountManagementServer.Presentasions.Controllers
             return Ok($"Month with ID {id} was deleted successfully.");
         }
 
-
-        
-
         [HttpGet("get-month-id")]
         public async Task<IActionResult> GetMonthId(int userId, int month, int year)
         {
@@ -136,6 +131,40 @@ namespace AccountManagementServer.Presentasions.Controllers
             }
 
             return Ok(new { monthId });
+        }
+
+        [HttpGet("year-summary")]
+        public async Task<IActionResult> GetYearSummary(int userId, int year)
+        {
+            try
+            {
+                var data = await _monthService.GetYearSummaryAsync(userId, year);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+        [HttpGet("export-csv")]
+        public async Task<IActionResult> ExportMonthCsv(int monthId, int userId)
+        {
+            try
+            {
+                var csv = await _monthService.ExportMonthCsvAsync(monthId, userId);
+                if (string.IsNullOrEmpty(csv))
+                {
+                    return NotFound("No data found for the given month.");
+                }
+
+                var bytes = Encoding.UTF8.GetBytes(csv);
+                return File(bytes, "text/csv", $"MonthlyReport_{monthId}.csv");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
         }
 
 

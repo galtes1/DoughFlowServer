@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace AccountManagementServer.Core.Models
@@ -11,10 +11,10 @@ namespace AccountManagementServer.Core.Models
         public int ExpenseId { get; set; }
 
         [Required]
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
 
         [Required]
-        public DateTime Date { get; set; } 
+        public DateTime Date { get; set; }
 
         [Required]
         [ForeignKey("ExpenseCategory")]

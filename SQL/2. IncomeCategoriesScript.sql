@@ -1,4 +1,4 @@
-INSERT INTO IncomeCategories (IncomeCategoryName) VALUES 
+INSERT INTO IncomeCategories (Name) VALUES 
 ('FirstSalary'),
 ('SecondSalary'),
 ('Allowance'),

@@ -1,6 +1,7 @@
 ﻿using AccountManagementServer.Application.Interface;
 using AccountManagementServer.Core.Interfaces;
 using AccountManagementServer.Core.Models;
+using System.Text;
 
 namespace AccountManagementServer.Application.Service
 {
@@ -13,11 +14,10 @@ namespace AccountManagementServer.Application.Service
             _monthRepository = monthRepository;
         }
 
-
         public async Task<Month?> GetPieDataByMonthAsync(int userId, int monthId)
-        {           
+        {
             try
-            {    
+            {
                 var monthEntity = await _monthRepository.GetPieDataByMonthAsync(userId, monthId);
 
                 if (monthEntity == null)
@@ -42,7 +42,6 @@ namespace AccountManagementServer.Application.Service
             }
         }
 
-
         public async Task<int?> GetMonthIdByDateAndUserAsync(int userId, int month, int year)
         {
             DateTime monthDate = new DateTime(year, month, 1);
@@ -50,9 +49,6 @@ namespace AccountManagementServer.Application.Service
 
             return monthEntity?.MonthId;
         }
-
-       
-      
 
         public async Task<Month> CreateMonthAsync(Month month)
         {
@@ -84,8 +80,6 @@ namespace AccountManagementServer.Application.Service
             return await _monthRepository.GetMonthByDateAndUserAsync(userId, monthDate);
         }
 
-        // FOR GPT
-     
         public async Task<int?> GetPreviousMonthIdAsync(int userId, int currentMonthId)
         {
             var allMonths = await _monthRepository.GetAllMonthsAsync();
@@ -113,11 +107,38 @@ namespace AccountManagementServer.Application.Service
             return null;
         }
 
-
         public async Task<List<Month>> GetMonthsByUserAsync(int userId)
         {
             return await _monthRepository.GetMonthsByUserAsync(userId);
         }
+
+        public Task<List<MonthTotalsDto>> GetYearSummaryAsync(int userId, int year)
+        {
+            return _monthRepository.GetYearSummaryAsync(userId, year);
+        }
+
+        public async Task<string> ExportMonthCsvAsync(int monthId, int userId)
+        {
+            var month = await _monthRepository.GetMonthWithDetailsAsync(monthId, userId);
+            if (month == null) return string.Empty;
+
+            var sb = new StringBuilder();
+            sb.AppendLine("Type,Category,Amount,Date,Description");
+
+            foreach (var income in month.Incomes)
+            {
+                sb.AppendLine($"Income,{income.IncomeName},{income.Amount},{income.Date:yyyy-MM-dd},{income.Description}");
+            }
+
+            foreach (var expense in month.Expenses)
+            {
+                sb.AppendLine($"Expense,{expense.expenseName},{expense.Amount},{expense.Date:yyyy-MM-dd},{expense.Description}");
+            }
+
+            return sb.ToString();
+        }
+
+
 
     }
 }

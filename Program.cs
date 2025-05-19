@@ -1,9 +1,9 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using AccountManagementServer.Application.Interface;
 using AccountManagementServer.Application.Service;
 using AccountManagementServer.Core.Interfaces;
 using AccountManagementServer.Core.Services;
 using AccountManagementServer.Infrastructure.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -22,8 +22,8 @@ namespace AccountManagementServer
 
             builder.Services.AddControllers();
 
-            string connectionString = "Server=YOUR_DB; Database=AccountManagementDb; Trusted_Connection=True;TrustServerCertificate=True;";
-             builder.Services.AddDbContext<AccountManagementDbContext>(options => options.UseSqlServer(connectionString));
+            string connectionString = "Server=GALT\\SQL2019HEB; Database=AccountManagementDb; Trusted_Connection=True;TrustServerCertificate=True;";
+            builder.Services.AddDbContext<AccountManagementDbContext>(options => options.UseSqlServer(connectionString));
 
             builder.Services.AddSingleton<IAuthService, JwtAuthService>();
 
@@ -42,8 +42,8 @@ namespace AccountManagementServer
 
 
             builder.Logging.ClearProviders();
-            builder.Logging.AddConsole(); 
-            builder.Logging.AddDebug();  
+            builder.Logging.AddConsole();
+            builder.Logging.AddDebug();
 
 
 

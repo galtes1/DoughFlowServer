@@ -17,7 +17,7 @@ namespace AccountManagementServer.Core.Services
         public async Task<Month?> GetPieDataByMonthAsync(int userId, int monthId)
         {
             return await _context.Months
-                .Where(m => m.UserId == userId && m.MonthId == monthId) 
+                .Where(m => m.UserId == userId && m.MonthId == monthId)
                 .Include(m => m.Expenses)
                 .Include(m => m.Incomes)
                 .AsSplitQuery()
@@ -28,9 +28,8 @@ namespace AccountManagementServer.Core.Services
             return await _context.Months
                 .Include(m => m.Expenses)
                 .Include(m => m.Incomes)
-                .FirstOrDefaultAsync(m => m.UserId == userId && m.Date == monthDate);                
+                .FirstOrDefaultAsync(m => m.UserId == userId && m.Date == monthDate);
         }
-       
 
         public async Task<Month?> GetMonthByIdAsync(int monthId)
         {
@@ -86,7 +85,7 @@ namespace AccountManagementServer.Core.Services
             return month;
         }
         // FOR GPT
-       
+
         public async Task<List<Month>> GetMonthsByUserAsync(int userId)
         {
             return await _context.Months
@@ -94,6 +93,35 @@ namespace AccountManagementServer.Core.Services
                 .OrderBy(m => m.Date)
                 .ToListAsync();
         }
+
+        public async Task<List<MonthTotalsDto>> GetYearSummaryAsync(int userId, int year)
+        {
+            var months = await _context.Months
+                .Where(m => m.UserId == userId && m.Date.Year == year)
+                .Select(m => new MonthTotalsDto
+                {
+                    Month = m.Date.Month,
+                    IncomeTotal = m.Incomes.Sum(i => i.Amount),
+                    ExpenseTotal = m.Expenses.Sum(i => i.Amount)
+
+                })
+                .ToListAsync();
+
+            // Ensure 12 months
+            return Enumerable.Range(1, 12)
+                             .Select(m => months.FirstOrDefault(x => x.Month == m)
+                                          ?? new MonthTotalsDto { Month = m })
+                             .ToList();
+        }
+
+        public async Task<Month?> GetMonthWithDetailsAsync(int monthId, int userId)
+        {
+            return await _context.Months
+                .Include(m => m.Incomes)
+                .Include(m => m.Expenses)
+                .FirstOrDefaultAsync(m => m.MonthId == monthId && m.UserId == userId);
+        }
+
 
 
     }

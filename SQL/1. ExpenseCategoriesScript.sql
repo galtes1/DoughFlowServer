@@ -1,4 +1,4 @@
-INSERT INTO ExpenseCategories (ExpenseCategoryName) VALUES 
+INSERT INTO ExpenseCategories (Name) VALUES 
 ('Shopping'),
 ('Car'),
 ('Insurances'),
