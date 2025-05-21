@@ -17,12 +17,12 @@ namespace AccountManagementServer
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-            // קבלת המפתח מהקונפיגורציה
-            string openAiKey = builder.Configuration["myChatGPT:ApiKey"];
 
             builder.Services.AddControllers();
 
-            string connectionString = "Server=GALT\\SQL2019HEB; Database=AccountManagementDb; Trusted_Connection=True;TrustServerCertificate=True;";
+            // Replace YOUR_SQL_SERVER_NAME with your actual SQL Server name, e.g. localhost\\SQLEXPRESS
+            string connectionString = "Server=[[YOUR_SQL_SERVER_NAME]]; Database=DoughFlowDb; Trusted_Connection=True; TrustServerCertificate=True;";
+
             builder.Services.AddDbContext<AccountManagementDbContext>(options => options.UseSqlServer(connectionString));
 
             builder.Services.AddSingleton<IAuthService, JwtAuthService>();
