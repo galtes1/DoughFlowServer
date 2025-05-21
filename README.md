@@ -60,11 +60,21 @@ The API should now be running at: `https://localhost:1463`
 
 You’ll find three SQL files in the `SQL/` folder:
 
-- `1. ExpenseCategoriesScript.sql`
-- `2. IncomeCategoriesScript.sql`
-- `3. insertRecordYear2024.sql`
+1. `ExpenseCategoriesScript.sql`  
+2. `IncomeCategoriesScript.sql`  
+3. `insertRecordYear2024.sql`  
 
-These are executed automatically through the migration logic on first-time setup.
+These scripts should be executed manually after the initial migration and database setup.  
+They populate the database with predefined expense and income categories, and sample records for the year 2024.
+
+⚠️ For script 3 (`insertRecordYear2024.sql`), follow these steps **before running it**:
+- First, sign up through the web application.
+- Navigate to the **personal profile area** from the top menu.
+- Locate your **user ID** displayed on the page.
+- Edit the script and replace the placeholder `[x]` with your actual user ID in the following line:
+  
+  ```sql
+  DECLARE @UserId INT = [x]; -- 👈 Replace [x] with your actual user ID
 
 ---
 
